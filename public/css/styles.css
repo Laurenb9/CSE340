@@ -290,3 +290,29 @@ main .upgrade-grid article a {
 main .upgrade-grid article a:hover {
   text-decoration: underline;
 }
+
+.vehicle-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.vehicle-detail-grid img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.vehicle-info h2 {
+  margin-bottom: 0.5rem;
+}
+
+.vehicle-info h3 {
+  margin-bottom: 1rem;
+}
+
+@media(max-width: 768px) {
+  .vehicle-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
