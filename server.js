@@ -5,6 +5,8 @@
 /* ***********************
  * Require Statements
  *************************/
+const session = require("express-session")
+const pool = require('./database/')
 const express = require("express")
 const env = require("dotenv").config()
 const app = express()
@@ -14,6 +16,28 @@ const baseController = require("./controllers/baseController")
 const utilities = require("./utilities/")
 const invRoute = require("./routes/inventoryRoute")
 const errorRoute = require("./routes/errorRoute")
+const accountRoute = require("./routes/accountRoute") 
+
+/* ***********************
+ * Middleware
+ * ************************/
+ app.use(session({
+  store: new (require('connect-pg-simple')(session))({
+    createTableIfMissing: true,
+    pool,
+  }),
+  secret: process.env.SESSION_SECRET,
+  resave: true,
+  saveUninitialized: true,
+  name: 'sessionId',
+}))
+
+// Express Messages Middleware
+app.use(require('connect-flash')())
+app.use(function(req, res, next){
+  res.locals.messages = require('express-messages')(req, res)
+  next()
+})
 
 /* ***********************
  * View Engine and Templates
@@ -21,11 +45,20 @@ const errorRoute = require("./routes/errorRoute")
 app.set("view engine", "ejs")
 app.use(expressLayouts)
 app.set("layout", "./layouts/layout") // not at views root
-app.use("/error", errorRoute)
+
 
 /* ***********************
  * Routes
  *************************/
+
+// Inject nav into all views
+app.use(async (req, res, next) => {
+  const utilities = require("./utilities")
+  res.locals.nav = await utilities.getNav()
+  next()
+})
+app.use("/error", errorRoute)
+app.use("/account", accountRoute)
 
 // Index route
 app.get("/", baseController.buildHome)
