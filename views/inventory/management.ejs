@@ -1,0 +1,61 @@
+<!-- views/inventory/management.ejs -->
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/forms.css"> <!-- si tienes CSS -->
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Inventory Management</h1>
+      <p role="note">Gestión de clasificaciones e inventario — accesible sólo desde la URL <code>/inv</code>.</p>
+    </header>
+
+    <!-- FLASH MESSAGES -->
+    <section aria-live="polite">
+      <% if (successMessages && successMessages.length) { %>
+        <div class="flash flash-success" role="status">
+          <% successMessages.forEach(function(msg){ %>
+            <p><%= msg %></p>
+          <% }) %>
+        </div>
+      <% } %>
+
+      <% if (errorMessages && errorMessages.length) { %>
+        <div class="flash flash-error" role="alert">
+          <% errorMessages.forEach(function(msg){ %>
+            <p><%= msg %></p>
+          <% }) %>
+        </div>
+      <% } %>
+
+      <% if (infoMessages && infoMessages.length) { %>
+        <div class="flash flash-info">
+          <% infoMessages.forEach(function(msg){ %>
+            <p><%= msg %></p>
+          <% }) %>
+        </div>
+      <% } %>
+    </section>
+
+    <!-- LINKS: usan rutas MVC, no muestran vistas estáticas -->
+    <nav aria-label="Inventory actions">
+      <ul>
+        <li>
+          <a href="/inv/add-classification" class="btn">Add New Classification</a>
+        </li>
+        <li>
+          <a href="/inv/add-vehicle" class="btn">Add New Vehicle</a>
+        </li>
+      </ul>
+    </nav>
+
+    <footer>
+      <p>Nota: esta vista debe cumplir el *frontend checklist* (titular, mensajes, accesibilidad, etc.).</p>
+    </footer>
+  </main>
+</body>
+</html>

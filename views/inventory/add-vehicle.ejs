@@ -1,0 +1,87 @@
+<%- include('../partials/header') %>
+
+<main>
+  <h1>Add New Vehicle</h1>
+
+  <!-- Flash messages -->
+  <% if (successMessages && successMessages.length) { %>
+    <div class="flash-success" role="status">
+      <% successMessages.forEach(msg => { %><p><%= msg %></p><% }) %>
+    </div>
+  <% } %>
+
+  <% if (errorMessages && errorMessages.length) { %>
+    <div class="flash-error" role="alert">
+      <% errorMessages.forEach(msg => { %><p><%= msg %></p><% }) %>
+    </div>
+  <% } %>
+
+  <!-- Server-side validation errors -->
+  <% if (errors && errors.length) { %>
+    <div class="validation-errors" role="alert">
+      <ul>
+      <% errors.forEach(err => { %>
+        <li><%= err.msg %></li>
+      <% }) %>
+      </ul>
+    </div>
+  <% } %>
+
+  <form id="addVehicleForm" action="/inv/add-vehicle" method="POST" novalidate>
+    <!-- Classification select (prebuilt HTML from utilities) -->
+    <label for="classificationList">Classification</label>
+    <%- classificationList %>
+    <p class="note">Choose the classification for the vehicle (required).</p>
+
+    <label for="inv_make">Make</label>
+    <input type="text" id="inv_make" name="inv_make" required minlength="1" maxlength="30"
+           value="<%= (invData && invData.inv_make) ? invData.inv_make : '' %>">
+
+    <label for="inv_model">Model</label>
+    <input type="text" id="inv_model" name="inv_model" required minlength="1" maxlength="30"
+           value="<%= (invData && invData.inv_model) ? invData.inv_model : '' %>">
+
+    <label for="inv_description">Description</label>
+    <textarea id="inv_description" name="inv_description" required minlength="5" maxlength="1000"><%= (invData && invData.inv_description) ? invData.inv_description : '' %></textarea>
+
+    <label for="inv_price">Price</label>
+    <input type="text" id="inv_price" name="inv_price" required pattern="^\d+(\.\d{1,2})?$" title="Number, optional 2 decimals"
+           value="<%= (invData && invData.inv_price) ? invData.inv_price : '' %>">
+
+    <label for="inv_year">Year (4 digits)</label>
+    <input type="text" id="inv_year" name="inv_year" required pattern="^\d{4}$" title="4 digit year"
+           value="<%= (invData && invData.inv_year) ? invData.inv_year : '' %>">
+
+    <label for="inv_miles">Miles</label>
+    <input type="text" id="inv_miles" name="inv_miles" required pattern="^\d+$" title="Digits only"
+           value="<%= (invData && invData.inv_miles) ? invData.inv_miles : '' %>">
+
+    <label for="inv_color">Color</label>
+    <input type="text" id="inv_color" name="inv_color" required maxlength="30"
+           value="<%= (invData && invData.inv_color) ? invData.inv_color : '' %>">
+
+    <label for="inv_image">Image Path</label>
+    <input type="text" id="inv_image" name="inv_image" value="<%= (invData && invData.inv_image) ? invData.inv_image : '/images/no-image-available.png' %>">
+
+    <label for="inv_thumbnail">Thumbnail Path</label>
+    <input type="text" id="inv_thumbnail" name="inv_thumbnail" value="<%= (invData && invData.inv_thumbnail) ? invData.inv_thumbnail : '/images/no-image-available-tn.png' %>">
+
+    <button type="submit">Add Vehicle</button>
+  </form>
+
+<script>
+  // Client-side validation (enhance HTML5)
+  const form = document.getElementById('addVehicleForm')
+  form.addEventListener('submit', function (e) {
+    // Let HTML5 do its thing first
+    if (!form.checkValidity()) {
+      e.preventDefault()
+      form.reportValidity()
+      return
+    }
+    // Additional JS checks can go here if needed
+  })
+</script>
+
+<%- include('../partials/footer') %>
+</main>

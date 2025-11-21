@@ -98,4 +98,32 @@ Util.buildClassificationGrid = function (data) {
   return grid
 }
 
+/* ****************************************
+ * Build Classification <select> List
+ **************************************** */
+Util.buildClassificationList = async function (classification_id = null) {
+  let data = await invModel.getClassifications()
+
+  // Para manejar ambos casos: con "rows" o sin "rows"
+  const rows = data.rows ? data.rows : data
+
+  let classificationList =
+    '<select name="classification_id" id="classificationList" required>'
+  classificationList += "<option value=''>Choose a Classification</option>"
+
+  rows.forEach(row => {
+    classificationList += `<option value="${row.classification_id}"`
+    if (
+      classification_id != null &&
+      row.classification_id == classification_id
+    ) {
+      classificationList += " selected "
+    }
+    classificationList += `>${row.classification_name}</option>`
+  })
+
+  classificationList += "</select>"
+  return classificationList
+}
+
 module.exports = Util

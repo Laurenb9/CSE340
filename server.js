@@ -17,6 +17,13 @@ const utilities = require("./utilities/")
 const invRoute = require("./routes/inventoryRoute")
 const errorRoute = require("./routes/errorRoute")
 const accountRoute = require("./routes/accountRoute") 
+const flash = require('connect-flash');
+const invRouter = require('./routes/inventoryRoute');
+
+
+// ======= ALIAS MÍNIMO =======
+// Creamos un alias mínimo para evitar ReferenceError.
+
 
 /* ***********************
  * Middleware
@@ -38,6 +45,9 @@ app.use(function(req, res, next){
   res.locals.messages = require('express-messages')(req, res)
   next()
 })
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }))
 
 /* ***********************
  * View Engine and Templates
@@ -70,13 +80,15 @@ app.use(async (req, res, next) => {
   next({status: 404, message: 'Sorry, we appear to have lost that page.'})
 })
 
+// ====== Eliminada la línea duplicada: app.use('/inv', invRouter);
+ /* app.use('/inv', invRouter);  <-- duplicada y removida on purpose */
+
 /* ***********************
  * Local Server Information
  * Values from .env (environment) file
  *************************/
 const port = process.env.PORT || 5500
 const host = process.env.HOST
-
 /* ***********************
 * Express Error Handler
 * Place after all other middleware
